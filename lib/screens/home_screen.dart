@@ -253,7 +253,10 @@ class TrendingMovies extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  Text('Connection Change detected.\nTry yo Relod app'),
+                  Text(
+                    'Connection Change detected.\nTry to Relod app',
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             );

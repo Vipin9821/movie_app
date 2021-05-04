@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
         // fontFamily: GoogleFonts.comfortaa().fontFamily,
         fontFamily: GoogleFonts.lato().fontFamily,
       ),
+      title: 'Moviesto',
       onGenerateRoute: AppRouter().onGenerateRoute,
       home: SplashScreen(),
     );

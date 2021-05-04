@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/screens/home_screen.dart';
 import 'package:movie_app/screens/movie_detail_screen.dart';
 import 'package:movie_app/screens/splash_screen.dart';
+import 'package:movie_app/screens/video_screen.dart';
 
 class AppRouter {
   Route onGenerateRoute(RouteSettings routeSettings) {
@@ -19,6 +20,11 @@ class AppRouter {
       case MovieDetailsPage.routeName:
         return MaterialPageRoute(
           builder: (context) => MovieDetailsPage(),
+        );
+        break;
+        case PlayerScreen.routeName:
+ return MaterialPageRoute(
+          builder: (context) => PlayerScreen(),
         );
         break;
       default:

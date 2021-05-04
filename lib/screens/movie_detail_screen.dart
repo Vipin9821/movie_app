@@ -63,7 +63,9 @@ class MovieDetailsPage extends StatelessWidget {
                                 await Api().getVideoLink(data.id.toString());
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return PlayerScreen(key);
+                              return PlayerScreen(
+                                videoId: key,
+                              );
                             }));
                           },
                           child: CircleAvatar(
