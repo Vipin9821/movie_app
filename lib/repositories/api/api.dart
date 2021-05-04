@@ -17,11 +17,17 @@ class Api {
 
       for (int i = 0; i < 15; i++) {
         dataList.add(MovieModel.fromJson(json['results'][i]));
+        // print('index' +
+        //     dataList
+        //         .indexWhere((element) =>
+        //             element.backdropPath == '/w2uGvCpMtvRqZg6waC1hvLyZoJa.jpg')
+        //         .toString());
+        // print(dataList[5]);
       }
     } catch (e) {
       throw e;
     }
-    print(dataList[0].originalTitle);
+    // print(dataList[0].originalTitle);
     return dataList;
   }
 

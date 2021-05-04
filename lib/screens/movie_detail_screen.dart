@@ -44,24 +44,44 @@ class MovieDetailsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(),
                       Container(
-                        alignment: Alignment.center,
-                        child: IconButton(
-                            icon: Icon(
-                              Icons.play_arrow,
-                              size: 75,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.arrow_back),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () async {
+                            var key =
+                                await Api().getVideoLink(data.id.toString());
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return PlayerScreen(key);
+                            }));
+                          },
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: Colors.white,
+                            // alignment: Alignment.center,
+                            child: Center(
+                              child: Icon(
+                                Icons.play_arrow,
+                                color: Colors.red,
+                                size: 75,
+                              ),
                             ),
-                            onPressed: () async {
-                              var key =
-                                  await Api().getVideoLink(data.id.toString());
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return PlayerScreen(key);
-                              }));
-                            }),
+                          ),
+                        ),
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             data.originalTitle,
@@ -76,7 +96,10 @@ class MovieDetailsPage extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: Colors.amber,
                                 borderRadius: BorderRadius.circular(15)),
-                            child: Text(data.voteAverage.toString() + '/10'),
+                            child: Text(
+                              data.voteAverage.toString() + '/10',
+                              style: TextStyle(color: Colors.black),
+                            ),
                           ),
                         ],
                       ),
@@ -111,145 +134,102 @@ class MovieDetailsPage extends StatelessWidget {
                 ),
               ),
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.all(30),
+                // height: 100,
+                // color: Colors.grey,
+                width: size.width,
+                alignment: Alignment.center,
+                child: Row(
+                  // main,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          Icon(Icons.date_range_sharp),
+                          Text(data.releaseDate.toString()),
+                        ],
+                      ),
+                    ),
+                    Divider(),
+                    Container(
+                      child: Column(
+                        children: [
+                          Icon(Icons.timeline),
+                          Text(data.runtime.toString() + ' min'),
+                        ],
+                      ),
+                    ),
+                    Divider(),
+                    Container(
+                      child: Column(
+                        children: [
+                          Icon(Icons.language),
+                          Text(data.originalLanguage),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Production Companies',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      // width: 390,
+                      height: 70,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            print(data.productionCompanies[index].logoPath);
+                            return Container(
+                              // width: 200,
+                              height: 90, padding: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: FadeInImage(
+                                placeholder: AssetImage(
+                                  'assets/popcorn.png',
+                                ),
+                                image: NetworkImage(
+                                    'https://image.tmdb.org/t/p/w500' +
+                                        data.productionCompanies[index].logoPath
+                                            .toString()),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, _) {
+                            return SizedBox(
+                              width: 25,
+                            );
+                          },
+                          itemCount: data.productionCompanies.length),
+                    )
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
-    // return Scaffold(
-    //   body: CustomScrollView(
-    //     slivers: [
-    //       SliverToBoxAdapter(
-    //         child: DestinationImageCarousel(
-    //           imgUrl: imgUrl,
-    //           // placeName: 'Destination\nName',
-    //         ),
-    //       ),
-    //       SliverToBoxAdapter(
-    //         child: SizedBox(
-    //           height: 15,
-    //         ),
-    //       ),
-    //       SliverToBoxAdapter(
-    //         child: Container(
-    //           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               Text(
-    //                 'Place Name',
-    //                 style: TextStyle(
-    //                   // color: Colors.black,
-    //                   fontSize: 30,
-    //                   fontWeight: FontWeight.w900,
-    //                   // fontFamily: GoogleFonts.lobster().fontFamily,
-    //                 ),
-    //               ),
-    //               SizedBox(
-    //                 height: 8,
-    //                 // child:
-    //               ),
-    //               Container(
-    //                 margin: EdgeInsets.all(6),
-    //                 child: Text(
-    //                   'Place descrition text will appear here\nIt was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum',
-    //                   style: TextStyle(
-    //                     fontSize: 18,
-    //                   ),
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       // SliverToBoxAdapter(
-    //       //   child: SizedBox(
-    //       //     height: 15,
-    //       //   ),
-    //       // ),
-    //       SliverToBoxAdapter(
-    //         child: Container(
-    //           margin: EdgeInsets.all(30),
-    //           // height: 100,
-    //           // color: Colors.grey,
-    //           width: size.width,
-    //           alignment: Alignment.center,
-    //           child: Row(
-    //             // main,
-    //             crossAxisAlignment: CrossAxisAlignment.center,
-    //             mainAxisAlignment: MainAxisAlignment.spaceAround,
-    //             children: [
-    //               Container(
-    //                 child: Column(
-    //                   children: [
-    //                     Icon(Icons.grade),
-    //                     Text('Rating'),
-    //                   ],
-    //                 ),
-    //               ),
-    //               Divider(),
-    //               Container(
-    //                 child: Column(
-    //                   children: [
-    //                     Icon(Icons.location_city_outlined),
-    //                     Text('City'),
-    //                   ],
-    //                 ),
-    //               ),
-    //               Divider(),
-    //               Container(
-    //                 child: Column(
-    //                   children: [
-    //                     Icon(Icons.card_travel),
-    //                     Text('Visitors'),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       SliverToBoxAdapter(
-    //         child: ReviewsSection(),
-    //       ),
-    //       nearByPlacesTab
-    //           ? SliverToBoxAdapter(
-    //               child: _nearByPlaces(size, context),
-    //             )
-    //           : SliverToBoxAdapter(),
-    //       SliverToBoxAdapter(
-    //         child: SizedBox(
-    //           height: 15,
-    //         ),
-    //       ),
-    //       restaurantsTab
-    //           ? SliverToBoxAdapter(
-    //               child: _restaurants(size),
-    //             )
-    //           : SliverToBoxAdapter(),
-    //       SliverToBoxAdapter(
-    //         child: SizedBox(
-    //           height: 15,
-    //         ),
-    //       ),
-    //       hotelsTab
-    //           ? SliverToBoxAdapter(
-    //               child: _hotelsTab(size),
-    //             )
-    //           : SliverToBoxAdapter(),
-    //       SliverToBoxAdapter(
-    //         child: SizedBox(
-    //           height: 15,
-    //         ),
-    //       ),
-    //       SliverToBoxAdapter(
-    //         child: Container(
-    //           margin: const EdgeInsets.symmetric(vertical: 35, horizontal: 25),
-    //           child: Text('Ⓒ MovieApp 2021'),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
-    // ;
   }
 }

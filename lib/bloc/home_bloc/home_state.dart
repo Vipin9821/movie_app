@@ -44,3 +44,4 @@ class MovieDetailState extends HomeState {
   final MovieModel detail;
   const MovieDetailState({this.detail});
 }
+class ConnectionChangeState extends HomeState{}

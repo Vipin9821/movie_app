@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:movie_app/models/model.dart';
 import 'package:movie_app/repositories/api/api.dart';
@@ -18,17 +20,48 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async* {
     print(event);
     if (event is GetHomeScreenContent) {
-      List<MovieModel> movieData = await Api().getApiData();
+      yield LoadingHomeScreenContent();
+      const apiKey = '4ff255842911eabc0e40fcc8f9357f79';
 
+      Connectivity connectivity = Connectivity();
       // await Api().getSpecificMovieDetails('192');
       try {
-        if (movieData.isNotEmpty) {
-          yield HomeScreenContentLoadedState(movieData: movieData);
+        var result = await connectivity.checkConnectivity();
+        String getConnectionValue(var res) {
+          String status = '';
+          switch (result) {
+            case ConnectivityResult.mobile:
+              status = 'Mobile';
+              break;
+            case ConnectivityResult.wifi:
+              status = 'Wi-Fi';
+              break;
+            case ConnectivityResult.none:
+              status = 'None';
+              break;
+            default:
+              status = 'None';
+              break;
+          }
+          return status;
+        }
+
+        var temp = getConnectionValue(result);
+        if (temp != 'None') {
+          print(result);
+          print('connected');
+          List<MovieModel> movieData = await Api().getApiData();
+          if (movieData.isNotEmpty) {
+            yield HomeScreenContentLoadedState(movieData: movieData);
+          } else {
+            yield HomeScreenErrorState(error: 'Something went wrong.');
+          }
         } else {
           yield HomeScreenErrorState(error: 'Something went wrong.');
         }
-      } catch (e) {
-        throw e;
+      } catch (_) {
+        print('not connected');
+        yield ConnectionChangeState();
       }
     }
     if (event is GetMovieDetails) {

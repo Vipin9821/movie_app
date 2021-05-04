@@ -15,3 +15,4 @@ class GetMovieDetails extends HomeEvent {
   final String movieId;
   const GetMovieDetails({this.movieId});
 }
+

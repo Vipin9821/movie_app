@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                                 Text(
                                   'Hello',
                                   style: TextStyle(
-                                    fontSize: 28,
+                                    fontSize: 38,
                                     fontWeight: FontWeight.w900,
                                   ),
                                 ),
@@ -74,6 +74,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         Container(
                           height: 110,
+                          width: size.width,
                           alignment: Alignment.center,
                           margin: const EdgeInsets.all(18),
                           padding: const EdgeInsets.all(8),
@@ -83,12 +84,24 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                '''“Life is a banquet, and most poor suckers are starving to death!”''',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontFamily: GoogleFonts.lobster().fontFamily,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Image.asset(
+                                    'assets/popcorn.png',
+                                    height: 80,
+                                  ),
+                                  Text(
+                                    '''“Life is a banquet, and most poor \nsuckers are starving to death!”''',
+                                    maxLines: 3,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily:
+                                          GoogleFonts.lobster().fontFamily,
+                                    ),
+                                  ),
+                                ],
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -105,12 +118,12 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.all(18),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 children: [
                                   Text(
-                                    'Trending',
+                                    'Top 10',
                                     style: TextStyle(
                                       fontSize: 28,
                                       fontWeight: FontWeight.w900,
@@ -128,10 +141,10 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              IconButton(
-                                icon: Icon(Icons.arrow_forward),
-                                onPressed: () {},
-                              )
+                              // IconButton(
+                              //   icon: Icon(Icons.arrow_forward),
+                              //   onPressed: () {},
+                              // )
                             ],
                           ),
                         ),
@@ -187,29 +200,126 @@ class TrendingMovies extends StatelessWidget {
         },
         builder: (context, state) {
           print(state);
+          if (state is LoadingHomeScreenContent) {
+            return Container(
+              height: 300,
+              child: Center(
+                child: CircularProgressIndicator(
+                  // valueColor: ,
+                  strokeWidth: 1,
+                ),
+              ),
+            );
+          }
+          if (state is HomeScreenErrorState) {
+            return Container(
+              height: 300,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/no.png',
+                      height: 100,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Text('No Internet Connectivity'),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        bloc.add(GetHomeScreenContent());
+                      },
+                      child: Text('Retry'),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
+          if (state is ConnectionChangeState) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/no.png',
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text('Connection Change detected.\nTry yo Relod app'),
+                ],
+              ),
+            );
+          }
           if (state is HomeScreenContentLoadedState) {
             return Container(
-              height: size.height * 0.5,
+              height: 500,
               // width: size.width * 0.8,
               child: Swiper(
                 containerHeight: 500,
                 containerWidth: 400,
                 viewportFraction: 0.9,
                 curve: Curves.bounceInOut,
-                control: SwiperControl(),
+                control: SwiperControl(size: 22),
                 pagination: new SwiperPagination(
                   alignment: Alignment.bottomCenter,
                   builder: new DotSwiperPaginationBuilder(
                       color: Colors.grey, activeColor: Color(0xff38547C)),
                 ),
-                itemCount: 4,
+                itemCount: 10,
                 itemHeight: 500,
                 itemWidth: 400,
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      bloc.add(GetMovieDetails(
-                          movieId: state.movieData[index].id.toString()));
+                      // if (index != 5) {
+                      if (state.movieData[index + 1].id != null) {
+                        // bloc.add(LoadingHomeScreenContent());
+                        bloc.add(GetMovieDetails(
+                            movieId: state.movieData[index + 1].id.toString()));
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Something went wrong',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w900,
+                                    )),
+                                content: Text(
+                                    'This shows Api does not have data for corresponding movie. Please select other one!'),
+                                actions: [
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.005, vertical: 15),
+                                      decoration: BoxDecoration(
+                                          color: Colors.amber,
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      child: Center(
+                                        child: Text(
+                                          'Ok',
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
+                      }
                     },
                     child: Container(
                       margin: const EdgeInsets.all(15),
@@ -223,7 +333,7 @@ class TrendingMovies extends StatelessWidget {
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
-                                  'https://image.tmdb.org/t/p/w500${state.movieData[index].posterPath}',
+                                  'https://image.tmdb.org/t/p/w500${state.movieData[index + 1].posterPath}',
                                 ),
                               ),
                             ),
@@ -250,7 +360,7 @@ class TrendingMovies extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Text(state
-                                            .movieData[index].voteAverage
+                                            .movieData[index + 1].voteAverage
                                             .toString() +
                                         '/10'),
                                   ),
@@ -265,7 +375,7 @@ class TrendingMovies extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Text(
-                                      state.movieData[index].originalTitle
+                                      state.movieData[index + 1].originalTitle
                                           .toString(),
                                       maxLines: 3,
                                       // overflow: Overflow.clip,
@@ -286,6 +396,7 @@ class TrendingMovies extends StatelessWidget {
               ),
             );
           }
+          bloc.add(GetHomeScreenContent());
           return CircularProgressIndicator();
         });
   }

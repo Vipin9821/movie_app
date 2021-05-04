@@ -33,7 +33,7 @@ class SplashScreen extends StatelessWidget {
                 flex: 2,
               ),
               Text(
-                'Movie App',
+                'Moviesto',
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.w800,

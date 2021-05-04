@@ -7,7 +7,7 @@ import 'generes_model.dart';
 class MovieModel {
   bool adult;
   String backdropPath;
-  Null belongsToCollection;
+  var belongsToCollection;
   int budget;
   List<Genres> genres;
   String homepage;
@@ -78,13 +78,13 @@ class MovieModel {
     popularity = json['popularity'];
     posterPath = json['poster_path'];
     if (json['production_companies'] != null) {
-      productionCompanies =<ProductionCompanies>[];
+      productionCompanies = <ProductionCompanies>[];
       json['production_companies'].forEach((v) {
         productionCompanies.add(new ProductionCompanies.fromJson(v));
       });
     }
     if (json['production_countries'] != null) {
-      productionCountries =<ProductionCountries>[];
+      productionCountries = <ProductionCountries>[];
       json['production_countries'].forEach((v) {
         productionCountries.add(new ProductionCountries.fromJson(v));
       });
@@ -147,9 +147,3 @@ class MovieModel {
     return data;
   }
 }
-
-
-
-
-
-
