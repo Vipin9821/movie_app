@@ -21,7 +21,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     print(event);
     if (event is GetHomeScreenContent) {
       yield LoadingHomeScreenContent();
-      const apiKey = '4ff255842911eabc0e40fcc8f9357f79';
 
       Connectivity connectivity = Connectivity();
       // await Api().getSpecificMovieDetails('192');

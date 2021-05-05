@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movie_app/models/model.dart';
 
 class Api {
-  static const apiKey = '4ff255842911eabc0e40fcc8f9357f79';
+  static const apiKey = '<your api key>';
   Future<List<MovieModel>> getApiData() async {
     const String uri =
         'https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey&language=en-US&page=1';
