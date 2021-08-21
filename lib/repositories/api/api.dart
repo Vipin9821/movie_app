@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:movie_app/models/model.dart';
 
 class Api {
-  static const apiKey = '<your api key>';
+  static const apiKey = '<your api key >';
   Future<List<MovieModel>> getApiData() async {
     const String uri =
         'https://api.themoviedb.org/3/movie/top_rated?api_key=$apiKey&language=en-US&page=1';
@@ -17,17 +17,11 @@ class Api {
 
       for (int i = 0; i < 15; i++) {
         dataList.add(MovieModel.fromJson(json['results'][i]));
-        // print('index' +
-        //     dataList
-        //         .indexWhere((element) =>
-        //             element.backdropPath == '/w2uGvCpMtvRqZg6waC1hvLyZoJa.jpg')
-        //         .toString());
-        // print(dataList[5]);
+   
       }
     } catch (e) {
       throw e;
     }
-    // print(dataList[0].originalTitle);
     return dataList;
   }
 

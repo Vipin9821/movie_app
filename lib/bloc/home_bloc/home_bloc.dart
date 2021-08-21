@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:movie_app/models/model.dart';
 import 'package:movie_app/repositories/api/api.dart';
-import 'package:movie_app/screens/home_screen.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
